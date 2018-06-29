@@ -14,41 +14,34 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Slf4j
-@RabbitListener(queues = "sayhello")
 @Service
 public class ConsumerService {
 
     @Autowired
     ObjectMapper objectMapper;
 
-    @RabbitHandler
+    @RabbitListener(queues = "sayhello")
     public void receiveHello(String msg) {
         log.info(LocalDateTime.now() + " received message: \"" + msg + "\"");
     }
 
-    @RabbitHandler
-    public void receiveUserObject(User msg) {
-        log.info(LocalDateTime.now() + " received user message: \"" + msg + "\"");
+    @RabbitListener(queues = "#{fanoutQueue.name}")
+    public void receiveUser(Message message) {
+        try {
+            User user = objectMapper.readValue(message.getBody(), User.class);
+            log.info(LocalDateTime.now() + " received user: \"" + user.toString() + "\"");
+        } catch (IOException e) {
+            log.error("Could not parse User", e);
+        }
     }
 
-
-//    @RabbitListener(queues = "#{fanoutQueue.name}")
-//    public void receiveUser(Message message) {
-//        try {
-//            User user = objectMapper.readValue(message.getBody(), User.class);
-//            log.info(LocalDateTime.now() + " received user: \"" + user.toString() + "\"");
-//        } catch (IOException e) {
-//            log.error("Could not parse User", e);
-//        }
-//    }
-//
-//    @RabbitListener(queues = "#{directQueue.name}")
-//    public void receiveUserFromDirectExchange(Message message) {
-//        try {
-//            User user = objectMapper.readValue(message.getBody(), User.class);
-//            log.info(LocalDateTime.now() + " received user: \"" + user.toString() + "\"");
-//        } catch (IOException e) {
-//            log.error("Could not parse User", e);
-//        }
-//    }
+    @RabbitListener(queues = "#{directQueue.name}")
+    public void receiveUserFromDirectExchange(Message message) {
+        try {
+            User user = objectMapper.readValue(message.getBody(), User.class);
+            log.info(LocalDateTime.now() + " received user: \"" + user.toString() + "\"");
+        } catch (IOException e) {
+            log.error("Could not parse User", e);
+        }
+    }
 }
