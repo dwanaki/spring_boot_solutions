@@ -13,9 +13,8 @@ import java.util.*;
 @Service
 public class BeerService {
     private BeerRepository beerRepository;
-    
-    private Map<String, List<BeerItem>> beerStock;
     private OrderRepository orderRepository;
+    private Map<String, List<BeerItem>> beerStock;
     
     @Autowired
     public BeerService(BeerRepository beerRepository, OrderRepository orderRepository) {
@@ -23,10 +22,11 @@ public class BeerService {
         this.orderRepository = orderRepository;
     }
     
-    public BeerItem getBeer(String client, String beerName) {
+    public BeerItem extractBeer(String client, String beerName) {
         if (beerStock.containsKey(client)) {
             List<BeerItem> beerItemList = beerStock.get(client);
             final Optional<BeerItem> beerItem = beerItemList.stream().filter(item -> beerName.equals(item.getBeerName())).findFirst();
+            beerItemList.remove(beerItem.orElse(null));
             return beerItem.orElse(null);
         }
         return null;
@@ -71,5 +71,9 @@ public class BeerService {
     public BeerOrder findBeerOrderById(Integer index) {
         if (index == null) return null;
         return orderRepository.findBeerOrderById(index);
+    }
+    
+    public List<BeerItem> extractAllBeerItemsReadyFor(String client) {
+        return beerStock.remove(client);
     }
 }

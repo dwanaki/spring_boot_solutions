@@ -14,9 +14,9 @@ public class OrdersController {
     @Autowired
     private BeerService beerService;
     
-    @GetMapping(value = "getBeer", produces = MediaType.APPLICATION_JSON_VALUE)
-    public BeerItem getBeer(@RequestParam String client, @RequestParam String beerName) {
-        return beerService.getBeer(client, beerName);
+    @GetMapping(value = "takeBeer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public BeerItem takeBeer(@RequestParam String client, @RequestParam String beerName) {
+        return beerService.extractBeer(client, beerName);
     }
     
     @PostMapping(value = "placeOrder", consumes = MediaType.APPLICATION_JSON_VALUE)
