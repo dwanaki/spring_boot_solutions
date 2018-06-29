@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.innogy.emobility.springtraining</groupId>
-	<artifactId>springtraining</artifactId>
+	<artifactId>beer-shop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>springtraining</name>
-	<description>Project for innogy Spring Training</description>
+	<name>beer-shop</name>
+	<description>Beer Shop for innogy Spring Training</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
