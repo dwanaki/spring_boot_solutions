@@ -59,7 +59,7 @@ public class ProducerService {
     /**
      * Send a {@link User} object to direct exchange
      */
-    @Scheduled(fixedDelay = 10000)
+//    @Scheduled(fixedDelay = 10000)
     public void sendUserToDirect() {
         User user = User.builder().birthday(LocalDate.now()).username("direct-exchange-user").firstname("Firstname")
                         .lastname("Lastname").build();
