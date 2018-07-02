@@ -1,30 +1,16 @@
 package de.innogy.emobility.springtraining.repository;
 
 import de.innogy.emobility.springtraining.model.BeerItem;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Repository
-public class BeerRepository {
-    private List<BeerItem> stock;
-    
-    public List<BeerItem> saveAll(List<BeerItem> beerItems) {
-        stock.addAll(beerItems);
-        return null;
-    }
-    
-    public List<BeerItem> findByBeerName(String name) {
-        return stock.stream().filter(beer -> name.equals(beer.getBeerName())).collect(Collectors.toList());
-    }
-    
-    public void deleteByBeerName(String beerName) {
-        stock.removeAll(findByBeerName(beerName));
-    }
-    
-    public BeerItem save(BeerItem beerItem) {
-        stock.add(beerItem);
-        return beerItem;
-    }
+public interface BeerRepository extends JpaRepository<BeerItem, String> {
+
+    @Query("SELECT bi FROM BeerItem bi WHERE bi.alcoholVol = 0.0")
+    public List<BeerItem> provideNonAlcoholicSortiment();
+
+    public List<BeerItem> findAllByQuantityIsLessThanEqual(Integer quantity);
+
 }
