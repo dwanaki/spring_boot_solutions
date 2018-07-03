@@ -1,4 +1,4 @@
-package com.innogy.emobility.springtraining.rabbitmqproducer.service;
+package de.innogy.emobility.springtraining.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,8 @@ public class OnDemandService {
     }
 
     @GetMapping(value = "/userdata")
-    public ResponseEntity sendDataToExchange(){
-        producerService.sendUserToFanout();
-        return new ResponseEntity("Userdata will be sent to Queue", HttpStatus.OK);
+    public ResponseEntity<String> sendDataToExchange(){
+        producerService.sendBeerItemToFanout();
+        return new ResponseEntity<>("Userdata will be sent to Queue", HttpStatus.OK);
     }
 }

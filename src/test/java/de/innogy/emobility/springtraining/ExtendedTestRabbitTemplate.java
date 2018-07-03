@@ -1,4 +1,4 @@
-package com.innogy.emobility.springtraining.rabbitmqproducer;
+package de.innogy.emobility.springtraining;
 
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;

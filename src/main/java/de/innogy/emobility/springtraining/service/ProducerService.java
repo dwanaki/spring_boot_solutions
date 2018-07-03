@@ -1,6 +1,6 @@
-package com.innogy.emobility.springtraining.rabbitmqproducer.service;
+package de.innogy.emobility.springtraining.service;
 
-import com.innogy.emobility.springtraining.rabbitmqproducer.model.User;
+import de.innogy.emobility.springtraining.model.BeerItem;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 
 /**
  * Service class to send messages to RabbitMQ
@@ -48,26 +46,23 @@ public class ProducerService {
     }
 
     /**
-     * Send a {@link User} object to fanout exchange
+     * Send a {@link BeerItem} object to fanout exchange
      */
     @Scheduled(fixedDelay = 10000, initialDelay = 5000)
-    public void sendUserToFanout() {
-        User user = User.builder().birthday(LocalDate.now()).username("FanoutUser").firstname("Firstname")
-                        .lastname("Lastname").build();
-        log.info("Sending User: \"" + user.toString() + "\" to exchange: " + fanoutExchange.getName());
-        rabbitTemplate.convertAndSend(fanoutExchange.getName(), "", user);
+    public void sendBeerItemToFanout() {
+        BeerItem beerItem = BeerItem.builder().beerName("Sink the Bismarck").alcoholVol(41.0D).bottleSizeInMl(375).build();
+        log.info("Sending BeerItem: \"" + beerItem.toString() + "\" to exchange: " + fanoutExchange.getName());
+        rabbitTemplate.convertAndSend(fanoutExchange.getName(), "", beerItem);
     }
 
     /**
-     * Send a {@link User} object to direct exchange
+     * Send a {@link BeerItem} object to direct exchange
      */
     @Scheduled(fixedDelay = 10000, initialDelay = 7500)
-    public void sendUserToDirect() {
-        User user = User.builder().birthday(LocalDate.now()).username("direct-exchange-user").firstname("Firstname")
-                        .lastname("Lastname").build();
-        log.info("Sending User: \"" + user
-                .toString() + "\" with routingKey: " + directRoutingKey + " to exchange: " + directExchange.getName());
-        rabbitTemplate.convertAndSend(directExchange.getName(), directRoutingKey, user);
+    public void sendBeerItemToDirect() {
+        BeerItem beerItem = BeerItem.builder().beerName("Schmackofatz Pilsener").alcoholVol(8.7D).bottleSizeInMl(500).build();
+        log.info("Sending Beer: \"" + beerItem.toString() + "\" with routingKey: " + directRoutingKey + " to exchange: " + directExchange.getName());
+        rabbitTemplate.convertAndSend(directExchange.getName(), directRoutingKey, beerItem);
     }
 
 }

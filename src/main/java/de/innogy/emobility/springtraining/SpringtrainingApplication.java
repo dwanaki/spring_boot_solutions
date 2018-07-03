@@ -1,12 +1,12 @@
-package com.innogy.emobility.springtraining.rabbitmqproducer;
+package de.innogy.emobility.springtraining;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RabbitmqProducerApplication {
+public class SpringtrainingApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RabbitmqProducerApplication.class, args);
+		SpringApplication.run(SpringtrainingApplication.class, args);
 	}
 }

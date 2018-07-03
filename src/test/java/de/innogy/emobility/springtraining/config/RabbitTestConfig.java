@@ -1,8 +1,8 @@
-package com.innogy.emobility.springtraining.rabbitmqproducer.config;
+package de.innogy.emobility.springtraining.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innogy.emobility.springtraining.rabbitmqproducer.ExtendedTestRabbitTemplate;
-import com.innogy.emobility.springtraining.rabbitmqproducer.model.User;
+import de.innogy.emobility.springtraining.ExtendedTestRabbitTemplate;
+import de.innogy.emobility.springtraining.model.BeerItem;
 import com.rabbitmq.client.Channel;
 import lombok.Getter;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
@@ -44,10 +44,10 @@ public class RabbitTestConfig implements RabbitListenerConfigurer {
     private List<String> sayhelloMessages = new ArrayList<>();
 
     @Getter
-    private List<User> fanoutUsers = new ArrayList<>();
+    private List<BeerItem> fanoutBeerItems = new ArrayList<>();
 
     @Getter
-    private List<User> directUsers = new ArrayList<>();
+    private List<BeerItem> directBeerItems = new ArrayList<>();
 
     /**
      * Replace RabbitTemplate by TestRabbitTemplate to use mock Exchanges and Queues.
@@ -124,29 +124,29 @@ public class RabbitTestConfig implements RabbitListenerConfigurer {
     /**
      * Listener for directQueue.
      *
-     * @param user beerdata
+     * @param beerItem beerdata
      */
     @RabbitListener(queues = directQueue)
-    public void receiveDirectUserData(User user) {
-        directUsers.add(user);
+    public void receiveDirectBeerItemData(BeerItem beerItem) {
+        directBeerItems.add(beerItem);
     }
 
     /**
      * Listener for fanoutQueue.
      *
-     * @param user beerdata
+     * @param beerItem beerdata
      */
     @RabbitListener(queues = fanoutQueue)
-    public void receivedFanoutUserData(User user) {
-        fanoutUsers.add(user);
+    public void receivedFanoutBeerItemData(BeerItem beerItem) {
+        fanoutBeerItems.add(beerItem);
     }
 
     /**
      * Clear the lists before running new tests.
      */
     public void clearReceivedQueueData() {
-        fanoutUsers.clear();
-        directUsers.clear();
+        fanoutBeerItems.clear();
+        directBeerItems.clear();
         sayhelloMessages.clear();
     }
 }

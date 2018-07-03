@@ -1,4 +1,4 @@
-package com.innogy.emobility.springtraining.rabbitmqproducer.config;
+package de.innogy.emobility.springtraining.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.DirectExchange;
