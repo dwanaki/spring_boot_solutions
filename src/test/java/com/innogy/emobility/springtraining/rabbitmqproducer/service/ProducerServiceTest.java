@@ -22,10 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
+@Slf4j
 @RunWith(SpringRunner.class)
 @Import(RabbitTestConfig.class)
 @SpringBootTest(webEnvironment = NONE)
-@Slf4j
 public class ProducerServiceTest {
 
     private ProducerService producerServiceTestSubject;
@@ -64,6 +64,6 @@ public class ProducerServiceTest {
     @Test
     public void sendStringToHello(){
         producerServiceTestSubject.sendStringToQueue();
-        assertThat(rabbitTestConfig.getSayhellos()).isNotEmpty();
+        assertThat(rabbitTestConfig.getSayhelloMessages()).isNotEmpty();
     }
 }

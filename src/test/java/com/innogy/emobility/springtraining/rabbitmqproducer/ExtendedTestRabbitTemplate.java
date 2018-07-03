@@ -19,7 +19,7 @@ public class ExtendedTestRabbitTemplate extends TestRabbitTemplate {
     /**
      * Extend method to be able to send messages to fanout exchanges in test.
      *
-     * @param channel    Chanbel
+     * @param channel    Channel
      * @param exchange   Exchange
      * @param routingKey RoutingKey
      * @param mandatory  mandatory flag

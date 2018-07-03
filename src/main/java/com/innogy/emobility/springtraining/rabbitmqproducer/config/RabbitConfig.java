@@ -20,8 +20,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class RabbitConfig {
 
-    public static final String DIRECT_EXCHANGE_ROUTING_KEY = "test-direct";
-
     private ObjectMapper objectMapper;
 
     @Autowired
@@ -45,15 +43,15 @@ public class RabbitConfig {
     }
 
     /**
-     * Queue as Bean to be able to autowire it
+     * Queue as Bean to be able to autowire it.
      *
-     * @param sayHelloQueue name of the Queue from properties
+     * @param helloQueue name of the Queue from properties
      *
      * @return {@link Queue}
      */
     @Bean
-    public Queue sayhello(@Value("${queue.sayhello}") String sayHelloQueue) {
-        return new Queue(sayHelloQueue);
+    public Queue helloQueue(@Value("${hello.queue}") String helloQueue) {
+        return new Queue(helloQueue);
     }
 
     /**
@@ -64,7 +62,7 @@ public class RabbitConfig {
      * @return {@link FanoutExchange}
      */
     @Bean
-    public FanoutExchange fanout(@Value("${exchange.training.fanout}") String fanoutExchange) {
+    public FanoutExchange fanout(@Value("${fanout.exchange}") String fanoutExchange) {
         return new FanoutExchange(fanoutExchange);
     }
 
@@ -76,7 +74,7 @@ public class RabbitConfig {
      * @return {@link DirectExchange}
      */
     @Bean
-    public DirectExchange direct(@Value("${exchange.training.direct}") String directExchangeName) {
+    public DirectExchange direct(@Value("${direct.exchange}") String directExchangeName) {
         return new DirectExchange(directExchangeName);
     }
 

@@ -32,16 +32,16 @@ import static org.mockito.Mockito.mock;
 @EnableRabbit
 @Configuration
 public class RabbitTestConfig implements RabbitListenerConfigurer {
-
-    public static final String sayHelloTestQueue ="test.sayhello";
-    public static final String fanoutQueue ="test.training.fanout";
-    public static final String directQueue ="test.training.direct";
+    
+    public static final String sayHelloTestQueue = "test.training.hello";
+    public static final String fanoutQueue = "test.training.fanout";
+    public static final String directQueue = "test.training.direct";
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Getter
-    private List<String> sayhellos = new ArrayList<>();
+    private List<String> sayhelloMessages = new ArrayList<>();
 
     @Getter
     private List<User> fanoutUsers = new ArrayList<>();
@@ -49,6 +49,11 @@ public class RabbitTestConfig implements RabbitListenerConfigurer {
     @Getter
     private List<User> directUsers = new ArrayList<>();
 
+    /**
+     * Replace RabbitTemplate by TestRabbitTemplate to use mock Exchanges and Queues.
+     *
+     * @return {@link ExtendedTestRabbitTemplate}
+     */
     @Bean
     public ExtendedTestRabbitTemplate testRabbitTemplate() {
         ExtendedTestRabbitTemplate testRabbitTemplate = new ExtendedTestRabbitTemplate(connectionFactory());
@@ -61,6 +66,11 @@ public class RabbitTestConfig implements RabbitListenerConfigurer {
         return new Jackson2JsonMessageConverter(objectMapper);
     }
 
+    /**
+     * Mock connection factory to provide active RabbitMQ instance.
+     *
+     * @return {@link ConnectionFactory} with mocked attributes
+     */
     @Bean
     public ConnectionFactory connectionFactory() {
         ConnectionFactory factory = mock(ConnectionFactory.class);
@@ -72,6 +82,11 @@ public class RabbitTestConfig implements RabbitListenerConfigurer {
         return factory;
     }
 
+    /**
+     * Create {@link MappingJackson2MessageConverter} to convert Messages with JSON-Payload
+     *
+     * @return JacksonMessageConverter for JSON-Payload
+     */
     @Bean
     public MappingJackson2MessageConverter consumerJackson2MessageConverter() {
         MappingJackson2MessageConverter consumerConverter = new MappingJackson2MessageConverter();
@@ -79,6 +94,11 @@ public class RabbitTestConfig implements RabbitListenerConfigurer {
         return consumerConverter;
     }
 
+    /**
+     * Create {@link DefaultMessageHandlerMethodFactory} with Jackson message converter.
+     *
+     * @return MessageHandler for JSON-Payload
+     */
     @Bean
     public DefaultMessageHandlerMethodFactory messageHandlerMethodFactory() {
         DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
@@ -91,19 +111,34 @@ public class RabbitTestConfig implements RabbitListenerConfigurer {
         registrar.setMessageHandlerMethodFactory(messageHandlerMethodFactory());
     }
 
+    /**
+     * Listener for sayHello queue.
+     *
+     * @param in message payload
+     */
+    @RabbitListener(queues = sayHelloTestQueue)
+    public void receivedHellos(String in) {
+        sayhelloMessages.add(in);
+    }
+
+    /**
+     * Listener for directQueue.
+     *
+     * @param user beerdata
+     */
     @RabbitListener(queues = directQueue)
     public void receiveDirectUserData(User user) {
         directUsers.add(user);
     }
 
+    /**
+     * Listener for fanoutQueue.
+     *
+     * @param user beerdata
+     */
     @RabbitListener(queues = fanoutQueue)
     public void receivedFanoutUserData(User user) {
         fanoutUsers.add(user);
-    }
-
-    @RabbitListener(queues = sayHelloTestQueue)
-    public void receivedHellos(String in) {
-        sayhellos.add(in);
     }
 
     /**
@@ -112,6 +147,6 @@ public class RabbitTestConfig implements RabbitListenerConfigurer {
     public void clearReceivedQueueData() {
         fanoutUsers.clear();
         directUsers.clear();
-        sayhellos.clear();
+        sayhelloMessages.clear();
     }
 }
