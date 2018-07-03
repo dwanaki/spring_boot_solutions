@@ -38,5 +38,4 @@ public class BeerRepositoryDataTest {
         }
         Assert.notEmpty(beerItems, "Empty Beer Item List!");
     }
-
 }
