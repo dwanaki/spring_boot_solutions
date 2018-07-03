@@ -46,13 +46,12 @@ public class BeerShopService {
         if (beerItem==null) {
             throw new OutOfStockException(beerName);
         } else if (beerItem.getQuantity() <= quantity) {
-            beerRepository.delete(beerItem);
-            return beerItem;
+            beerItem.setQuantity(0);
         } else {
             beerItem.addQuantity(quantity * -1);
-            beerRepository.save(beerItem);
-            return new BeerItem(beerItem.getBeerName(), beerItem.getBottleSizeInMl(), beerItem.getAlcoholVol(), quantity);
         }
+        beerRepository.save(beerItem);
+        return new BeerItem(beerItem.getBeerName(), beerItem.getBottleSizeInMl(), beerItem.getAlcoholVol(), quantity);
     }
 
     public void clearFromStock(String beerName) {
